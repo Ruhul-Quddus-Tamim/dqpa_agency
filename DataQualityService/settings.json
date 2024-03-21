@@ -1,0 +1,371 @@
+[
+    {
+        "id": "asst_80MJROtiHg9abhyZaCNKG40N",
+        "created_at": 1711010859,
+        "description": "This agent manages and coordinates tasks between the Data Quality Check Pipeline and the Report Generator agents, ensuring the workflow's efficiency and overseeing the entire data quality inspection process for the DataQualityInspector agency.",
+        "file_ids": [
+            "file-2TRzz44prkGnAbeyH1nINFDL"
+        ],
+        "instructions": "# DataQualityInspector Agency Manifesto\n\n### Mission: \nTo ensure the highest standard of data quality through meticulous evaluation and reporting, enabling datasets to achieve and maintain integrity and accuracy.\n\n### Agency Structure:\n\n- **CEO Agent**: The core point of communication, managing task assignments and ensuring seamless interaction and task completion within the agency. It supervises the operation from data quality checking to report generation.\n\n- **Data Quality Check Pipeline Agent**: This agent carries out a series of data quality checks excluding Schema Check. It works iteratively to resolve any issues encountered, aiming for a successful completion status code of 200, indicating that all data quality checks have passed without error.\n\n- **Report Generator Agent**: Following the successful completion of data quality checks, this agent compiles a comprehensive report in document format. This report details the outcomes of the checks, alongside recommendations for enhancements and best practices to improve data quality.\n\nThe CSV file will be stored in the `files` folder for access by the `dataQualityCheckPipeline` agent.\n\n# CEO Agent Instructions\n\nYou are the CEO agent for the DataQualityInspector agency. Your primary role is to manage and coordinate tasks between the Data Quality Check Pipeline and the Report Generator agents, ensuring the workflow's efficiency and overseeing the entire data quality inspection process. \n\n### Primary Instructions:\n1. Act as the central communication hub between the Data Quality Check Pipeline and the Report Generator agents. \n2. Ensure that tasks are distributed and executed efficiently across the agency, particularly focusing on the workflow between the two mentioned agents. \n3. Regularly update the user on the progress and outcomes of the data quality inspection process.\n4. Identify areas of improvement within the workflow and suggest changes or adaptations to enhance overall efficiency. \n5. Handle any issues that arise within the agency's operations and coordinate the resolution process.\n6. Maintain a high level of communication and collaboration among all agents within the agency.\n7. Ensure that the agency's goals are met with high standards of data quality inspection.",
+        "metadata": {},
+        "model": "gpt-4-turbo-preview",
+        "name": "CEO",
+        "object": "assistant",
+        "tools": [
+            {
+                "type": "code_interpreter"
+            },
+            {
+                "type": "retrieval"
+            },
+            {
+                "function": {
+                    "name": "SendMessage",
+                    "description": "Use this tool to facilitate direct, synchronous communication between specialized agents within your agency. When you send a message using this tool, you receive a response exclusively from the designated recipient agent. To continue the dialogue, invoke this tool again with the desired recipient agent and your follow-up message. Remember, communication here is synchronous; the recipient agent won't perform any tasks post-response. You are responsible for relaying the recipient agent's responses back to the user, as the user does not have direct access to these replies. Keep engaging with the tool for continuous interaction until the task is fully resolved.",
+                    "parameters": {
+                        "$defs": {
+                            "recipient": {
+                                "enum": [
+                                    "DataQualityCheckPipeline",
+                                    "ReportGenerator"
+                                ],
+                                "title": "recipient",
+                                "type": "string"
+                            }
+                        },
+                        "properties": {
+                            "instructions": {
+                                "description": "Please repeat your instructions step-by-step, including both completed and the following next steps that you need to perfrom. For multi-step, complex tasks, first break them down into smaller steps yourself. Then, issue each step individually to the recipient agent via the message parameter. Each identified step should be sent in separate message. Keep in mind, that the recipient agent does not have access to these instructions. You must include recipient agent-specific instructions in the message parameter.",
+                                "title": "Instructions",
+                                "type": "string"
+                            },
+                            "recipient": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/$defs/recipient"
+                                    }
+                                ],
+                                "description": "DataQualityCheckPipeline: This agent performs data quality checks on CSV files, including Distinct Count, Row Count, String Check, Sum Check, Not Null Check, and Uniqueness/Duplicates for the DataQualityInspector agency. It iteratively solves any encountered issues until a successful status code of 200 is achieved, indicating all data quality checks have passed without error.\nReportGenerator: This agent is tasked with generating a comprehensive report in document format after receiving a successful status code from the Data Quality Check Pipeline agent for the DataQualityInspector agency. The report summarizes the results of the data quality checks and includes suggestions for data quality improvements.\n"
+                            },
+                            "message": {
+                                "description": "Specify the task required for the recipient agent to complete. Focus on clarifying what the task entails, rather than providing exact instructions.",
+                                "title": "Message",
+                                "type": "string"
+                            },
+                            "message_files": {
+                                "default": null,
+                                "description": "A list of file ids to be sent as attachments to this message. Only use this if you have the file id that starts with 'file-'.",
+                                "examples": [
+                                    "file-1234",
+                                    "file-5678"
+                                ],
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "Message Files",
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "instructions",
+                            "message",
+                            "recipient"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            }
+        ]
+    },
+    {
+        "id": "asst_55YGqMlZ5AaB7mVTlfrI4gUS",
+        "created_at": 1711010860,
+        "description": "This agent performs data quality checks on CSV files, including Distinct Count, Row Count, String Check, Sum Check, Not Null Check, and Uniqueness/Duplicates for the DataQualityInspector agency. It iteratively solves any encountered issues until a successful status code of 200 is achieved, indicating all data quality checks have passed without error.",
+        "file_ids": [],
+        "instructions": "# DataQualityInspector Agency Manifesto\n\n### Mission: \nTo ensure the highest standard of data quality through meticulous evaluation and reporting, enabling datasets to achieve and maintain integrity and accuracy.\n\n### Agency Structure:\n\n- **CEO Agent**: The core point of communication, managing task assignments and ensuring seamless interaction and task completion within the agency. It supervises the operation from data quality checking to report generation.\n\n- **Data Quality Check Pipeline Agent**: This agent carries out a series of data quality checks excluding Schema Check. It works iteratively to resolve any issues encountered, aiming for a successful completion status code of 200, indicating that all data quality checks have passed without error.\n\n- **Report Generator Agent**: Following the successful completion of data quality checks, this agent compiles a comprehensive report in document format. This report details the outcomes of the checks, alongside recommendations for enhancements and best practices to improve data quality.\n\nThe CSV file will be stored in the `files` folder for access by the `dataQualityCheckPipeline` agent.\n\n# Data Quality Check Pipeline Agent Instructions\n\nYou are an agent responsible for performing a series of data quality checks on CSV files for the DataQualityInspector agency. These checks include Distinct Count, Row Count, String Check, Sum Check, Not Null Check, and Uniqueness/Duplicates. Your goal is to ensure the highest standard of data quality. \n\n### Primary Instructions:\n1. Perform the initial series of data quality checks on the provided CSV files. These checks include Distinct Count, Row Count, String Check, Sum Check, Not Null Check, and Uniqueness/Duplicates.\n2. Iteratively solve any issues encountered during the checks.\n3. Aim for a successful status code of 200, indicating all data quality checks have passed without error.\n4. Report the results of the data quality checks to the CEO agent for further action or reporting.\n5. Follow any specific instructions or adjustments provided by the CEO agent to improve the process or solve specific problems.",
+        "metadata": {},
+        "model": "gpt-4-turbo-preview",
+        "name": "DataQualityCheckPipeline",
+        "object": "assistant",
+        "tools": [
+            {
+                "type": "code_interpreter"
+            },
+            {
+                "type": "retrieval"
+            },
+            {
+                "function": {
+                    "name": "SumCheckTool",
+                    "description": "Verifies the sum of a specific column in a CSV file against an expected value.",
+                    "parameters": {
+                        "properties": {
+                            "filepath": {
+                                "description": "Path to the CSV file to perform the sum check on.",
+                                "title": "Filepath",
+                                "type": "string"
+                            },
+                            "column": {
+                                "description": "Name of the column to calculate the sum for.",
+                                "title": "Column",
+                                "type": "string"
+                            },
+                            "expected_sum": {
+                                "description": "Expected sum value for the specified column.",
+                                "title": "Expected Sum",
+                                "type": "number"
+                            }
+                        },
+                        "required": [
+                            "column",
+                            "expected_sum",
+                            "filepath"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "UniquenessDuplicatesCheckTool",
+                    "description": "Identifies and optionally removes duplicates in a CSV file to ensure data uniqueness.",
+                    "parameters": {
+                        "properties": {
+                            "filepath": {
+                                "description": "Path to the CSV file to check for and handle duplicates.",
+                                "title": "Filepath",
+                                "type": "string"
+                            },
+                            "columns": {
+                                "description": "List of column names to check for duplicates. If not provided, checks the entire DataFrame.",
+                                "items": {},
+                                "optional": true,
+                                "title": "Columns",
+                                "type": "array"
+                            },
+                            "remove_duplicates": {
+                                "description": "Whether to remove found duplicates from the CSV file.",
+                                "title": "Remove Duplicates",
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "columns",
+                            "filepath",
+                            "remove_duplicates"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "NotNullCheckTool",
+                    "description": "Verifies that specified columns in a CSV file do not contain null values.",
+                    "parameters": {
+                        "properties": {
+                            "filepath": {
+                                "description": "Path to the CSV file to perform the not null check on.",
+                                "title": "Filepath",
+                                "type": "string"
+                            },
+                            "columns": {
+                                "description": "List of column names to verify for the absence of null values.",
+                                "items": {},
+                                "title": "Columns",
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "columns",
+                            "filepath"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "StringCheckTool",
+                    "description": "Verifies if specified columns in a CSV file contain only string data types. \nIf you encounter any issue regarding the data type adjustment, please do adjust the string data types' column before you perform the checking.\nMake sure you don't get stuck by anything if you encounter any issue, you need to proceed.",
+                    "parameters": {
+                        "properties": {
+                            "filepath": {
+                                "description": "Path to the CSV file to perform the string check on.",
+                                "title": "Filepath",
+                                "type": "string"
+                            },
+                            "columns": {
+                                "description": "List of column names to check for string data type.",
+                                "items": {},
+                                "title": "Columns",
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "columns",
+                            "filepath"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "RowCountTool",
+                    "description": "Retrieves the total number of rows in a CSV file.",
+                    "parameters": {
+                        "properties": {
+                            "filepath": {
+                                "description": "Path to the CSV file to perform the row count check on.",
+                                "title": "Filepath",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "filepath"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "DistinctCountTool",
+                    "description": "Counts distinct observations over requested axis in a CSV file.",
+                    "parameters": {
+                        "properties": {
+                            "filepath": {
+                                "description": "Path to the CSV file to perform the distinct count check on.",
+                                "title": "Filepath",
+                                "type": "string"
+                            },
+                            "column": {
+                                "description": "Name of the column to calculate the distinct count for.",
+                                "title": "Column",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "column",
+                            "filepath"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "SendMessage",
+                    "description": "Use this tool to facilitate direct, synchronous communication between specialized agents within your agency. When you send a message using this tool, you receive a response exclusively from the designated recipient agent. To continue the dialogue, invoke this tool again with the desired recipient agent and your follow-up message. Remember, communication here is synchronous; the recipient agent won't perform any tasks post-response. You are responsible for relaying the recipient agent's responses back to the user, as the user does not have direct access to these replies. Keep engaging with the tool for continuous interaction until the task is fully resolved.",
+                    "parameters": {
+                        "$defs": {
+                            "recipient": {
+                                "const": "ReportGenerator",
+                                "title": "recipient"
+                            }
+                        },
+                        "properties": {
+                            "instructions": {
+                                "description": "Please repeat your instructions step-by-step, including both completed and the following next steps that you need to perfrom. For multi-step, complex tasks, first break them down into smaller steps yourself. Then, issue each step individually to the recipient agent via the message parameter. Each identified step should be sent in separate message. Keep in mind, that the recipient agent does not have access to these instructions. You must include recipient agent-specific instructions in the message parameter.",
+                                "title": "Instructions",
+                                "type": "string"
+                            },
+                            "recipient": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/$defs/recipient"
+                                    }
+                                ],
+                                "description": "ReportGenerator: This agent is tasked with generating a comprehensive report in document format after receiving a successful status code from the Data Quality Check Pipeline agent for the DataQualityInspector agency. The report summarizes the results of the data quality checks and includes suggestions for data quality improvements.\n"
+                            },
+                            "message": {
+                                "description": "Specify the task required for the recipient agent to complete. Focus on clarifying what the task entails, rather than providing exact instructions.",
+                                "title": "Message",
+                                "type": "string"
+                            },
+                            "message_files": {
+                                "default": null,
+                                "description": "A list of file ids to be sent as attachments to this message. Only use this if you have the file id that starts with 'file-'.",
+                                "examples": [
+                                    "file-1234",
+                                    "file-5678"
+                                ],
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "Message Files",
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "instructions",
+                            "message",
+                            "recipient"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            }
+        ]
+    },
+    {
+        "id": "asst_GFXOPtiscDStZdhRGIkePusB",
+        "created_at": 1711010861,
+        "description": "This agent is tasked with generating a comprehensive report in document format after receiving a successful status code from the Data Quality Check Pipeline agent for the DataQualityInspector agency. The report summarizes the results of the data quality checks and includes suggestions for data quality improvements.",
+        "file_ids": [],
+        "instructions": "# DataQualityInspector Agency Manifesto\n\n### Mission: \nTo ensure the highest standard of data quality through meticulous evaluation and reporting, enabling datasets to achieve and maintain integrity and accuracy.\n\n### Agency Structure:\n\n- **CEO Agent**: The core point of communication, managing task assignments and ensuring seamless interaction and task completion within the agency. It supervises the operation from data quality checking to report generation.\n\n- **Data Quality Check Pipeline Agent**: This agent carries out a series of data quality checks excluding Schema Check. It works iteratively to resolve any issues encountered, aiming for a successful completion status code of 200, indicating that all data quality checks have passed without error.\n\n- **Report Generator Agent**: Following the successful completion of data quality checks, this agent compiles a comprehensive report in document format. This report details the outcomes of the checks, alongside recommendations for enhancements and best practices to improve data quality.\n\nThe CSV file will be stored in the `files` folder for access by the `dataQualityCheckPipeline` agent.\n\n# Report Generator Agent Instructions\n\nYou are the Report Generator agent for the DataQualityInspector agency. Your task is to compile a comprehensive report in document format after the Data Quality Check Pipeline agent sends you a successful status code of 200, indicating all data quality checks have passed without error. \n\n### Primary Instructions:\n1. Receive data quality check results from the Data Quality Check Pipeline agent.\n2. Compile a comprehensive report in document format, summarizing the results of the data quality checks.\n3. Include in the report: a summary of the findings, data quality issues identified, and suggestions for data quality improvements.\n4. Provide the report to the CEO agent for further action or dissemination.\n5. Ensure the report is clear, concise, and accessible, with a focus on actionable insights to improve data quality.",
+        "metadata": {},
+        "model": "gpt-4-turbo-preview",
+        "name": "ReportGenerator",
+        "object": "assistant",
+        "tools": [
+            {
+                "type": "code_interpreter"
+            },
+            {
+                "type": "retrieval"
+            },
+            {
+                "function": {
+                    "name": "ReportGenerationTool",
+                    "description": "Generates comprehensive reports in document format incorporating findings and suggestions for data quality improvements.",
+                    "parameters": {
+                        "properties": {
+                            "findings": {
+                                "description": "String containing the findings from the data quality checks.",
+                                "title": "Findings",
+                                "type": "string"
+                            },
+                            "suggestions": {
+                                "description": "String containing suggestions for improving data quality.",
+                                "title": "Suggestions",
+                                "type": "string"
+                            },
+                            "report_title": {
+                                "description": "Title of the report.",
+                                "title": "Report Title",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "findings",
+                            "report_title",
+                            "suggestions"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "function"
+            }
+        ]
+    }
+]
